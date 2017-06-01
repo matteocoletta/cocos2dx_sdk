@@ -1,0 +1,31 @@
+dependencies: \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/SequentialThreadSupport.cpp \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/SequentialThreadSupport.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btScalar.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/PlatformDefinitions.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btMinMax.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/vmInclude.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/vectormath_aos.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/vecidx_aos.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/floatInVec.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/boolInVec.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/vec_aos.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/quat_aos.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/vectormath/sse/mat_aos.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/PpuAddressSpace.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btAlignedObjectArray.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btAlignedAllocator.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/btThreadSupportInterface.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/SpuCollisionTaskProcess.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/external/bullet/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuGatheringCollisionTask.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/BulletCollision//CollisionDispatch/btCollisionObject.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btTransform.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btMatrix3x3.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btVector3.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btQuaternion.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btQuadWord.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/LinearMath/btMotionState.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/BulletCollision//CollisionShapes/btCollisionShape.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/BulletCollision//BroadphaseCollision/btBroadphaseProxy.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/BulletCollision//CollisionShapes/btConvexShape.h \
+  /Users/ab/Dev/cocos2dx-projects/example/cocos2d/build/../external/bullet/BulletCollision//CollisionShapes/btCollisionMargin.h
