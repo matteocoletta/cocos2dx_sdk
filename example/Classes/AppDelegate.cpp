@@ -1,7 +1,9 @@
-#include "AppDelegate.h"
+#include "CommandExecutor.h"
 #include "HelloWorldScene.h"
 #include "Adjust/Adjust2dx.h"
 #include "AdjustTesting/AdjustTesting2dx.h"
+#include "AppDelegate.h"
+#include "cocos2d.h"
 
 USING_NS_CC;
 
@@ -9,6 +11,7 @@ static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+static CommandExecutor gCommandExecutor = CommandExecutor();
 
 AppDelegate::AppDelegate()
 {
@@ -42,6 +45,8 @@ static void commandCallbackMethod(std::string className, std::string methodName,
     CCLOG("\n[*cocos*] method name: %s", methodName.c_str());
     CCLOG("\n[*cocos*] params: %s", jsonParams.c_str());
     CCLOG("\n");
+
+    gCommandExecutor.ExecuteCommand(className, methodName, jsonParams);
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
