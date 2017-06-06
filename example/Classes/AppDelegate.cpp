@@ -51,7 +51,7 @@ static void commandCallbackMethod(std::string className, std::string methodName,
 
 bool AppDelegate::applicationDidFinishLaunching() {
     //std::string baseUrl = "https://10.0.2.2:8443";
-    std::string baseUrl = "https://192.168.8.19:8443";
+    std::string baseUrl = "https://192.168.8.246:8443";
     std::string sdkPrefix = "cocos4.11.2@android4.11.4";
     Adjust2dx::setTestingMode(baseUrl);
 

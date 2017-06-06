@@ -181,6 +181,11 @@ void Adjust2dx::setTestingMode(std::string baseUrl) {
 
 void Adjust2dx::teardown(bool deleteState) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miTeardown;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miTeardown, "com/adjust/sdk/AdjustFactory", "teardown", "(Landroid/content/Context;Z)V")) {
+        return;
+    }
+
     // Get context and initialize config object.
     cocos2d::JniMethodInfo miGetContext;
     if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
@@ -189,10 +194,6 @@ void Adjust2dx::teardown(bool deleteState) {
 
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
 
-    cocos2d::JniMethodInfo miTeardown;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miTeardown, "com/adjust/sdk/AdjustFactory", "teardown", "(Landroid/content/Context;Z;)V")) {
-        return;
-    }
 
     miTeardown.env->CallStaticVoidMethod(miTeardown.classID, miTeardown.methodID, jContext, deleteState);
 

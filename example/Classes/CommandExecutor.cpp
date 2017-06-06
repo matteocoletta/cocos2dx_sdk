@@ -9,7 +9,6 @@ USING_NS_CC;
 const std::string CommandExecutor::DefaultConfigName = "defaultConfig";
 const std::string CommandExecutor::DefaultEventName = "defaultEvent";
 
-
 void CommandExecutor::ExecuteCommand(std::string className, std::string methodName, std::string jsonParams) {
     CCLOG("\n[*cocos*] executeCommand()");
     rapidjson::Document params;
@@ -58,7 +57,6 @@ void CommandExecutor::Factory(rapidjson::Document& params) {
 }
 
 void CommandExecutor::Config(rapidjson::Document& params) {
-    CCLOG("\n[*cocos*] config()");
     std::string configName;
     if (params.HasMember("configName")) {
         configName = params["configName"][0].GetString();
@@ -66,23 +64,22 @@ void CommandExecutor::Config(rapidjson::Document& params) {
         configName = DefaultConfigName;
     }
 
-    AdjustConfig2dx* adjustConfig = NULL;
-    std::map<std::string, void*>::iterator it = savedInstances.find(configName);
-    if(it != savedInstances.end())
-    {
+    AdjustConfig2dx* adjustConfig;
+    auto it = savedInstances.find(configName);
+    if(it != savedInstances.end()) {
         adjustConfig = static_cast<AdjustConfig2dx*>(it->second); 
     } else {
-        std::string environment = params["environment"][0].GetString();
-        std::string appToken = params["appToken"][0].GetString();
+        auto environment = params["environment"][0].GetString();
+        auto appToken = params["appToken"][0].GetString();
         adjustConfig = new AdjustConfig2dx(appToken, environment);
-        std::string logLevel = params["logLevel"][0].GetString();
+        auto logLevel = params["logLevel"][0].GetString();
         adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
 
         savedInstances[configName] = static_cast<void*>(adjustConfig);
     }
 
     if (params.HasMember("logLevel")) {
-        std::string logLevel = params["logLevel"][0].GetString();
+        auto logLevel = params["logLevel"][0].GetString();
         if (logLevel == "verbose") adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
         if (logLevel == "debug") adjustConfig->setLogLevel(AdjustLogLevel2dxDebug);
         if (logLevel == "info") adjustConfig->setLogLevel(AdjustLogLevel2dxInfo);
@@ -93,30 +90,30 @@ void CommandExecutor::Config(rapidjson::Document& params) {
     }
 
     if (params.HasMember("defaultTracker")) {
-        std::string defaultTracker = params["defaultTracker"][0].GetString();
+        auto defaultTracker = params["defaultTracker"][0].GetString();
         adjustConfig->setDefaultTracker(defaultTracker);
     }
 
     if (params.HasMember("delayStart")) {
-        std::string delayStartS = params["delayStart"][0].GetString();
-        double delayStart = atof(delayStartS.c_str());
+        auto delayStartS = params["delayStart"][0].GetString();
+        auto delayStart = atof(delayStartS);
         adjustConfig->setDelayStart(delayStart);
     }
 
     if (params.HasMember("eventBufferingEnabled")) {
-        std::string eventBufferingEnabledS = params["eventBufferingEnabled"][0].GetString();
+        auto eventBufferingEnabledS = params["eventBufferingEnabled"][0].GetString();
         bool eventBufferingEnabled = to_bool(eventBufferingEnabledS);
         adjustConfig->setEventBufferingEnabled(eventBufferingEnabled);
     }
 
     if (params.HasMember("sendInBackground")) {
-        std::string sendInBackgroundS = params["sendInBackground"][0].GetString();
+        auto sendInBackgroundS = params["sendInBackground"][0].GetString();
         bool sendInBackground = to_bool(sendInBackgroundS);
         adjustConfig->setSendInBackground(sendInBackground);
     }
 
     if (params.HasMember("userAgent")) {
-        std::string userAgent = params["userAgent"][0].GetString();
+        auto userAgent = params["userAgent"][0].GetString();
         adjustConfig->setUserAgent(userAgent);
     }
 }
@@ -132,7 +129,15 @@ void CommandExecutor::Start(rapidjson::Document& params) {
         configName = DefaultConfigName;
     }
 
-    AdjustConfig2dx *adjustConfig = static_cast<AdjustConfig2dx*>(savedInstances[configName]);
+    AdjustConfig2dx* adjustConfig;
+    auto it = savedInstances.find(configName);
+    if(it != savedInstances.end())
+    {
+        adjustConfig = static_cast<AdjustConfig2dx*>(it->second); 
+    } else {
+        CCLOG("\n[*cocos*] start() ERROR!! Couldn't find saved instance of adjustConfig");
+        return;
+    }
 
     adjustConfig->setBasePath(basePath);
     Adjust2dx::start(*adjustConfig);
@@ -148,39 +153,39 @@ void CommandExecutor::Event(rapidjson::Document& params) {
         eventName = DefaultEventName;
     }
 
-    AdjustEvent2dx *adjustEvent = NULL;
+    AdjustEvent2dx *adjustEvent;
 
     std::map<std::string, void*>::iterator it = savedInstances.find(eventName);
     if(it != savedInstances.end())
     {
         adjustEvent = static_cast<AdjustEvent2dx*>(it->second); 
     } else {
-        std::string eventToken = params["eventToken"][0].GetString();
+        auto eventToken = params["eventToken"][0].GetString();
         adjustEvent = new AdjustEvent2dx(eventToken);
         savedInstances[eventName] = adjustEvent;
     }
 
     if (params.HasMember("revenue")) {
         auto& revenueParams = params["revenue"];
-        std::string currency = params["revenue"][0].GetString();
-        std::string strRevenue = params["revenue"][1].GetString();
-        double revenue = std::atof(strRevenue.c_str());
+        auto currency = params["revenue"][0].GetString();
+        auto strRevenue = params["revenue"][1].GetString();
+        auto revenue = std::atof(strRevenue);
         adjustEvent->setRevenue(revenue, currency);
     }
 
     if (params.HasMember("callbackParams")) {
         auto& callbackParams = params["callbackParams"];
         for (rapidjson::SizeType i = 0; i < callbackParams.Size(); i = i + 2) {
-            std::string key = callbackParams[i].GetString();
-            std::string value = callbackParams[i + 1].GetString();
+            auto key = callbackParams[i].GetString();
+            auto value = callbackParams[i + 1].GetString();
             adjustEvent->addCallbackParameter(key, value);
         }
     }
     if (params.HasMember("partnerParams")) {
         auto& partnerParams = params["partnerParams"];
         for (rapidjson::SizeType i = 0; i < partnerParams.Size(); i = i + 2) {
-            std::string key = partnerParams[i].GetString();
-            std::string value = partnerParams[i + 1].GetString();
+            auto key = partnerParams[i].GetString();
+            auto value = partnerParams[i + 1].GetString();
             adjustEvent->addPartnerParameter(key, value);
         }
     }
@@ -203,7 +208,7 @@ void CommandExecutor::TrackEvent(rapidjson::Document& params) {
 void CommandExecutor::SetReferrer(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] setReferrer()");
 
-    std::string referrer = params["referrer"][0].GetString();
+    auto referrer = params["referrer"][0].GetString();
     Adjust2dx::setReferrer(referrer);
 }
 
@@ -242,34 +247,42 @@ void CommandExecutor::SendFirstPackages(rapidjson::Document& params) {
 void CommandExecutor::AddSessionCallbackParameter(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] AddSessionCallbackParameter()");
 
-    //for (List<String> keyValuePairs: command.parameters.values()) {
-    //std::string key = keyValuePairs.get(0);
-    //std::string value = keyValuePairs.get(1);
-    //Adjust2dx::addSessionCallbackParameter(key, value);
-    //}
+    if (params.HasMember("KeyValue")) {
+        auto& values = params["KeyValue"];
+        for (SizeType i = 0; i < values.Size(); i = i + 2){
+            auto key = values[i];
+            auto value = values[i+1];
+            CCLOG("{key=%s, value=%s}", key.c_str(), value.c_str());
+            Adjust2dx::addSessionCallbackParameter(key, value);
+        }
+    }
 }
 
 void CommandExecutor::AddSessionPartnerParameter(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] AddSessionPartnerParameter()");
 
-    //for (List<String> keyValuePairs: command.parameters.values()) {
-    //std::string key = keyValuePairs.get(0);
-    //std::string value = keyValuePairs.get(1);
-    //Adjust2dx::addSessionPartnerParameter(key, value);
-    //}
+    if (params.HasMember("KeyValue")) {
+        auto& values = params["KeyValue"];
+        for (SizeType i = 0; i < values.Size(); i = i + 2){
+            auto key = values[i];
+            auto value = values[i+1];
+            CCLOG("{key=%s, value=%s}", key.c_str(), value.c_str());
+            Adjust2dx::addSessionPartnerParameter(key, value);
+        }
+    }
 }
 
 void CommandExecutor::RemoveSessionCallbackParameter(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] RemoveSessionCallbackParameter()");
 
-    std::string key = params["key"][0].GetString();
+    auto key = params["key"][0].GetString();
     Adjust2dx::removeSessionCallbackParameter(key);
 }
 
 void CommandExecutor::RemoveSessionPartnerParameter(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] RemoveSessionPartnerParameter()");
 
-    std::string key = params["key"][0].GetString();
+    auto key = params["key"][0].GetString();
     Adjust2dx::removeSessionPartnerParameter(key);
 }
 
@@ -288,7 +301,7 @@ void CommandExecutor::ResetSessionPartnerParameters(rapidjson::Document& params)
 void CommandExecutor::SetPushToken(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] SetPushToken()");
 
-    std::string token = params["pushToken"][0].GetString();
+    auto token = params["pushToken"][0].GetString();
     Adjust2dx::setDeviceToken(token);
 }
 
