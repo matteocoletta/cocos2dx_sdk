@@ -201,6 +201,58 @@ void Adjust2dx::teardown(bool deleteState) {
 #endif
 }
 
+void Adjust2dx::setTimerInterval(long timerInterval) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miSetTimerInterval;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTimerInterval, "com/adjust/sdk/AdjustFactory", "setTimerInterval", "(J)V")) {
+        return;
+    }
+
+    miSetTimerInterval.env->CallStaticVoidMethod(miSetTimerInterval.classID, miSetTimerInterval.methodID, timerInterval);
+
+#endif
+}
+
+void Adjust2dx::setTimerStart(long timerStart) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miSetTimerStart;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTimerStart, "com/adjust/sdk/AdjustFactory", "setTimerStart", "(J)V")) {
+        return;
+    }
+
+    miSetTimerStart.env->CallStaticVoidMethod(miSetTimerStart.classID, miSetTimerStart.methodID, timerStart);
+
+#endif
+}
+
+void Adjust2dx::setSessionInterval(long sessionInterval) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miSetSessionInterval;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetSessionInterval, "com/adjust/sdk/AdjustFactory", "setSessionInterval", "(J)V")) {
+        return;
+    }
+
+    miSetSessionInterval.env->CallStaticVoidMethod(miSetSessionInterval.classID, miSetSessionInterval.methodID, sessionInterval);
+
+#endif
+}
+
+void Adjust2dx::setSubsessionInterval(long subsessionInterval) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miSetSubsessionInterval;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetSubsessionInterval, "com/adjust/sdk/AdjustFactory", "setSubsessionInterval", "(J)V")) {
+        return;
+    }
+
+    miSetSubsessionInterval.env->CallStaticVoidMethod(miSetSubsessionInterval.classID, miSetSubsessionInterval.methodID, subsessionInterval);
+
+#endif
+}
+
 void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addSessionCallbackParameter(key, value);

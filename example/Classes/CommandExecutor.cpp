@@ -301,10 +301,53 @@ void CommandExecutor::ResetSessionPartnerParameters(rapidjson::Document& params)
 void CommandExecutor::SetPushToken(rapidjson::Document& params) {
     CCLOG("\n[*cocos*] SetPushToken()");
 
-    auto token = params["pushToken"][0].GetString();
+    auto token = GetFirstParameterValue(params, "pushToken").GetString();
     Adjust2dx::setDeviceToken(token);
 }
 
-bool CommandExecutor::to_bool(std::string const& s) {
+void CommandExecutor::OpenDeeplink(rapidjson::Document& params) {
+    CCLOG("\n[*cocos*] OpenDeeplink()");
+
+    auto deeplink = GetFirstParameterValue(params, "deeplink").GetString();
+    Adjust2dx::appWillOpenUrl(deeplink);
+}
+
+void CommandExecutor::SendReferrer(rapidjson::Document& params) {
+    CCLOG("\n[*cocos*] sendReferrer()");
+
+    auto referrer = GetFirstParameterValue(params, "referrer").GetString();
+    Adjust2dx::setReferrer(referrer);
+}
+
+void CommandExecutor::TestBegin(rapidjson::Document& params) {
+    CCLOG("\n[*cocos*] testBegin()");
+
+    if(params.HasMember("basePath")) {
+        auto& valBasePath = params["basePath"];
+        basePath = valBasePath[0].GetString();
+    }
+
+    Adjust2dx::teardown(true);
+    Adjust2dx::setTimerInterval(-1);
+    Adjust2dx::setTimerStart(-1);
+    Adjust2dx::setSessionInterval(-1);
+    Adjust2dx::setSubsessionInterval(-1);
+
+    savedInstances.clear();
+}
+
+void CommandExecutor::TestEnd(rapidjson::Document& params) {
+    CCLOG("\n[*cocos*] testEnd()");
+    Adjust2dx::teardown(true);
+}
+
+bool CommandExecutor::ToBool(std::string const& s) {
     return s != "false";
+}
+
+rapidjson::Value& CommandExecutor::GetFirstParameterValue(rapidjson::Document& params, std::string const& key) {
+    assert(params.HasMember(key.c_str()));
+    auto& val = params[key.c_str()];
+    assert(val.Size() > 1);
+    return val[0];
 }

@@ -36,7 +36,13 @@ private:
     void ResetSessionCallbackParameters(rapidjson::Document& params);
     void ResetSessionPartnerParameters(rapidjson::Document& params);
     void SetPushToken(rapidjson::Document& params);
-    bool to_bool(std::string const& s);
+    void Teardown(rapidjson::Document& params);
+    void OpenDeeplink(rapidjson::Document& params);
+    void SendReferrer(rapidjson::Document& params);
+    void TestBegin(rapidjson::Document& params);
+    void TestEnd(rapidjson::Document& params);
+    bool ToBool(std::string const& s);
+    rapidjson::Value& GetFirstParameterValue(rapidjson::Document& params, std::string const& key);
 };
 
 #endif //_COMMAND_EXECUTOR_H_
