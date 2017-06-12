@@ -17,7 +17,6 @@ private:
     std::string basePath;
     std::map<std::string, void*> savedInstances;
 
-    void Teardown(rapidjson::Document& params);
     void Factory(rapidjson::Document& params);
     void Config(rapidjson::Document& params);
     void Start(rapidjson::Document& params);
