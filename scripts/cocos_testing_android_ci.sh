@@ -21,4 +21,5 @@ cd ${SDK_DIR}
 cp -rf Android/* ${EXAMPLE_DIR}/proj.android-studio/app/libs
 
 echo -e "${GREEN}>>> Running cocos project ${NC}"
-cocos run -p android --android.studio
+cd ${EXAMPLE_DIR}
+cocos run -p android --android-studio
