@@ -13,6 +13,10 @@ class AppDelegate : private cocos2d::Application
 public:
     AppDelegate();
     virtual ~AppDelegate();
+    AdjustTesting2dx adjustTesting;
+
+    static void addInfoToSend(std::String key, std::String value);
+    static void sendInfoToServer();
 
     virtual void initGLContextAttrs();
 

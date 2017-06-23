@@ -12,15 +12,12 @@ public:
 
     void ExecuteCommand(std::string ,std::string ,std::string);
 private:
-    static const std::string DefaultConfigName;
-    static const std::string DefaultEventName;
     std::string basePath;
-    std::map<std::string, void*> savedInstances;
 
     void Factory(rapidjson::Document& params);
-    void Config(rapidjson::Document& params);
+    AdjustConfig2dx* Config(rapidjson::Document& params);
     void Start(rapidjson::Document& params);
-    void Event(rapidjson::Document& params);
+    AdjustEvent2dx* Event(rapidjson::Document& params);
     void TrackEvent(rapidjson::Document& params);
     void SetReferrer(rapidjson::Document& params);
     void Pause(rapidjson::Document& params);

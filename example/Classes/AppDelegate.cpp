@@ -55,7 +55,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     std::string sdkPrefix = "cocos4.11.2@android4.11.4";
     Adjust2dx::setTestingMode(baseUrl);
 
-    AdjustTesting2dx adjustTesting = AdjustTesting2dx(baseUrl, commandCallbackMethod);
+    adjustTesting = AdjustTesting2dx(baseUrl, commandCallbackMethod);
     adjustTesting.initTestSession(sdkPrefix);
 
     // initialize director
