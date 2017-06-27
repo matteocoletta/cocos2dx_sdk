@@ -4,6 +4,8 @@
 #include <map>
 #include <iostream>
 #include "rapidjson/document.h"
+#include "Adjust/AdjustConfig2dx.h"
+#include "Adjust/AdjustEvent2dx.h"
 
 class CommandExecutor
 {
@@ -38,7 +40,8 @@ private:
     void TestBegin(rapidjson::Document& params);
     void TestEnd(rapidjson::Document& params);
     bool ToBool(std::string const& s);
-    rapidjson::Value& GetFirstParameterValue(rapidjson::Document& params, std::string const& key);
+    double ToDouble(std::string const& s);
+    std::string GetValue(int idx, rapidjson::Document& params, std::string const& key);
 };
 
 #endif //_COMMAND_EXECUTOR_H_

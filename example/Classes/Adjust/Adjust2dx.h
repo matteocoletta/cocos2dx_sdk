@@ -39,10 +39,10 @@ public:
     static AdjustAttribution2dx getAttribution();
     static void setTestingMode(std::string baseUrl);
     static void teardown(bool deleteState);
-    static void setTimerInterval(long timerInterval);
-    static void setTimerStart(long timerStart);
-    static void setSessionInterval(long sessionInterval);
-    static void setSubsessionInterval(long subsessionInterval);
+    static void setTimerInterval(double timerInterval);
+    static void setTimerStart(double timerStart);
+    static void setSessionInterval(double sessionInterval);
+    static void setSubsessionInterval(double subsessionInterval);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     static void onResume();

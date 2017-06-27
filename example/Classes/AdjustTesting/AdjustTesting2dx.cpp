@@ -8,6 +8,7 @@
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustTesting2dx.h"
 #include "AdjustTestingProxy2dx.h"
+USING_NS_CC;
 
 void AdjustTesting2dx::initTesting(std::string baseUrl, void(*commandCallback)(std::string className, std::string methodName, std::string jsonParams)) {
     //Callback
@@ -37,13 +38,19 @@ void AdjustTesting2dx::initTesting(std::string baseUrl, void(*commandCallback)(s
     jclass clsTestLibrary = miInit.env->FindClass("com/adjust/testlibrary/TestLibrary");
     jmethodID midInit = miInit.env->GetMethodID(clsTestLibrary, "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V");
     
-    testLibrary = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCallbackProxy);
+    jobject tmp = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCallbackProxy);
+	this->testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
 
     miInit.env->DeleteLocalRef(jBaseUrl);
     miInitCallback.env->DeleteLocalRef(jCallbackProxy);
 }
 
 void AdjustTesting2dx::initTestSession(std::string sdkPrefix) {
+    if (this->testLibrary == NULL) {
+        CCLOG("\n[*cocos*] >>>> JNI initTestSession() testLibrary is null");
+        return;
+    }
+
     cocos2d::JniMethodInfo miInitTestSession;
 
     if (!cocos2d::JniHelper::getMethodInfo(miInitTestSession, "com/adjust/testlibrary/TestLibrary", "initTestSession", "(Ljava/lang/String;)V")) {
@@ -52,7 +59,39 @@ void AdjustTesting2dx::initTestSession(std::string sdkPrefix) {
     
     jstring jSdkPrefix = miInitTestSession.env->NewStringUTF(sdkPrefix.c_str());
     
-    miInitTestSession.env->CallVoidMethod(testLibrary, miInitTestSession.methodID, jSdkPrefix);
+    miInitTestSession.env->CallVoidMethod(this->testLibrary, miInitTestSession.methodID, jSdkPrefix);
     
     miInitTestSession.env->DeleteLocalRef(jSdkPrefix);
 }
+
+void AdjustTesting2dx::addInfoToSend(std::string key, std::string value) {
+    if (this->testLibrary == NULL) {
+        CCLOG("\n[*cocos*] >>>> JNI addInfoToSend() testLibrary is null");
+        return;
+    }
+
+    cocos2d::JniMethodInfo miAddInfoToSend;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miAddInfoToSend, "com/adjust/testlibrary/TestLibrary", "addInfoToSend", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+        return;
+    }
+    
+    jstring jKey = miAddInfoToSend.env->NewStringUTF(key.c_str());
+    jstring jValue = miAddInfoToSend.env->NewStringUTF(value.c_str());
+    
+    miAddInfoToSend.env->CallVoidMethod(this->testLibrary, miAddInfoToSend.methodID, jKey, jValue);
+
+    miAddInfoToSend.env->DeleteLocalRef(jKey);
+    miAddInfoToSend.env->DeleteLocalRef(jValue);
+}
+
+void AdjustTesting2dx::sendInfoToServer() {
+    cocos2d::JniMethodInfo miSendInfoToServer;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSendInfoToServer, "com/adjust/testlibrary/TestLibrary", "sendInfoToServer", "()V")) {
+        return;
+    }
+
+    miSendInfoToServer.env->CallVoidMethod(this->testLibrary, miSendInfoToServer.methodID);
+}
+

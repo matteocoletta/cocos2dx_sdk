@@ -1,7 +1,6 @@
 #include "CommandExecutor.h"
 #include "HelloWorldScene.h"
 #include "Adjust/Adjust2dx.h"
-#include "AdjustTesting/AdjustTesting2dx.h"
 #include "AppDelegate.h"
 #include "cocos2d.h"
 
@@ -12,6 +11,7 @@ static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 static CommandExecutor gCommandExecutor = CommandExecutor();
+static AdjustTesting2dx* adjustTesting = 0;
 
 AppDelegate::AppDelegate()
 {
@@ -19,6 +19,18 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate() 
 {
+}
+
+void AppDelegate::addInfoToSend(std::string key, std::string value) {
+    if(adjustTesting == NULL) {
+        CCLOG("\n[*cocos*] adjustTesting is null");
+    }
+
+    adjustTesting->addInfoToSend(key, value);
+}
+
+void AppDelegate::sendInfoToServer() {
+    adjustTesting->sendInfoToServer();
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -51,12 +63,12 @@ static void commandCallbackMethod(std::string className, std::string methodName,
 
 bool AppDelegate::applicationDidFinishLaunching() {
     //std::string baseUrl = "https://10.0.2.2:8443";
-    std::string baseUrl = "https://192.168.8.246:8443";
+    std::string baseUrl = "https://192.168.8.35:8443";
     std::string sdkPrefix = "cocos4.11.2@android4.11.4";
     Adjust2dx::setTestingMode(baseUrl);
 
-    adjustTesting = AdjustTesting2dx(baseUrl, commandCallbackMethod);
-    adjustTesting.initTestSession(sdkPrefix);
+    adjustTesting = new AdjustTesting2dx(baseUrl, commandCallbackMethod);
+    adjustTesting->initTestSession(sdkPrefix);
 
     // initialize director
     auto director = Director::getInstance();

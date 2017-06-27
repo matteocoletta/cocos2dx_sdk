@@ -2,6 +2,8 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
+#include <iostream>
+#include "AdjustTesting/AdjustTesting2dx.h"
 
 /**
 @brief    The cocos2d Application.
@@ -13,9 +15,8 @@ class AppDelegate : private cocos2d::Application
 public:
     AppDelegate();
     virtual ~AppDelegate();
-    AdjustTesting2dx adjustTesting;
 
-    static void addInfoToSend(std::String key, std::String value);
+    static void addInfoToSend(std::string key, std::string value);
     static void sendInfoToServer();
 
     virtual void initGLContextAttrs();

@@ -14,6 +14,7 @@
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJAdjust2dx.h"
 #endif
+USING_NS_CC;
 
 const std::string AdjustEnvironmentSandbox2dx = "sandbox";
 const std::string AdjustEnvironmentProduction2dx = "production";
@@ -201,7 +202,7 @@ void Adjust2dx::teardown(bool deleteState) {
 #endif
 }
 
-void Adjust2dx::setTimerInterval(long timerInterval) {
+void Adjust2dx::setTimerInterval(double timerInterval) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetTimerInterval;
 
@@ -209,12 +210,13 @@ void Adjust2dx::setTimerInterval(long timerInterval) {
         return;
     }
 
-    miSetTimerInterval.env->CallStaticVoidMethod(miSetTimerInterval.classID, miSetTimerInterval.methodID, timerInterval);
+    long val = static_cast<long>(timerInterval);
+    miSetTimerInterval.env->CallStaticVoidMethod(miSetTimerInterval.classID, miSetTimerInterval.methodID, (jlong)val);
 
 #endif
 }
 
-void Adjust2dx::setTimerStart(long timerStart) {
+void Adjust2dx::setTimerStart(double timerStart) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetTimerStart;
 
@@ -222,12 +224,13 @@ void Adjust2dx::setTimerStart(long timerStart) {
         return;
     }
 
-    miSetTimerStart.env->CallStaticVoidMethod(miSetTimerStart.classID, miSetTimerStart.methodID, timerStart);
+    long val = static_cast<long>(timerStart);
+    miSetTimerStart.env->CallStaticVoidMethod(miSetTimerStart.classID, miSetTimerStart.methodID, (jlong)val);
 
 #endif
 }
 
-void Adjust2dx::setSessionInterval(long sessionInterval) {
+void Adjust2dx::setSessionInterval(double sessionInterval) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetSessionInterval;
 
@@ -235,12 +238,13 @@ void Adjust2dx::setSessionInterval(long sessionInterval) {
         return;
     }
 
-    miSetSessionInterval.env->CallStaticVoidMethod(miSetSessionInterval.classID, miSetSessionInterval.methodID, sessionInterval);
+    long val = static_cast<long>(sessionInterval);
+    miSetSessionInterval.env->CallStaticVoidMethod(miSetSessionInterval.classID, miSetSessionInterval.methodID, (jlong)val);
 
 #endif
 }
 
-void Adjust2dx::setSubsessionInterval(long subsessionInterval) {
+void Adjust2dx::setSubsessionInterval(double subsessionInterval) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetSubsessionInterval;
 
@@ -248,7 +252,8 @@ void Adjust2dx::setSubsessionInterval(long subsessionInterval) {
         return;
     }
 
-    miSetSubsessionInterval.env->CallStaticVoidMethod(miSetSubsessionInterval.classID, miSetSubsessionInterval.methodID, subsessionInterval);
+    long val = static_cast<long>(subsessionInterval);
+    miSetSubsessionInterval.env->CallStaticVoidMethod(miSetSubsessionInterval.classID, miSetSubsessionInterval.methodID, (jlong)val);
 
 #endif
 }

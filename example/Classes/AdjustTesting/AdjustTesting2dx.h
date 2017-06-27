@@ -10,6 +10,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
+#include "platform/android/jni/JniHelper.h"
 #include <iostream>
 
 class AdjustTesting2dx {
@@ -20,11 +21,17 @@ private:
 
 public:
     AdjustTesting2dx() {}
+    ~AdjustTesting2dx() {
+	    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(this->testLibrary);
+        this->testLibrary = NULL;
+    }
 
     AdjustTesting2dx(std::string baseUrl, void(*commandCallback)(std::string className, std::string methodName, std::string jsonParams)) {
         initTesting(baseUrl, commandCallback);
     }
 
+    void addInfoToSend(std::string key, std::string value);
+    void sendInfoToServer();
     void initTestSession(std::string sdkPrefix);
 };
 #endif
