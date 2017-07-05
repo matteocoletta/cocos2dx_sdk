@@ -254,6 +254,11 @@ AdjustEvent2dx* CommandExecutor::Event(rapidjson::Document& params) {
         }
     }
 
+    if (params.HasMember("orderId")) {
+        auto orderId = GetValue(0, params, "orderId");
+        adjustEvent->setTransactionId(orderId);
+    }
+
     return adjustEvent;
 }
 
@@ -339,7 +344,7 @@ void CommandExecutor::RemoveSessionCallbackParameter(rapidjson::Document& params
         for (rapidjson::SizeType i = 0; i < values.Size(); i++){
             auto key = values[i].GetString();
             CCLOG("{key=%s}", key);
-            Adjust2dx::removeSessionPartnerParameter(key);
+            Adjust2dx::removeSessionCallbackParameter(key);
         }
     }
 }
@@ -352,7 +357,7 @@ void CommandExecutor::RemoveSessionPartnerParameter(rapidjson::Document& params)
         for (rapidjson::SizeType i = 0; i < values.Size(); i++){
             auto key = values[i].GetString();
             CCLOG("{key=%s}", key);
-            Adjust2dx::removeSessionCallbackParameter(key);
+            Adjust2dx::removeSessionPartnerParameter(key);
         }
     }
 }
