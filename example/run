@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cocos compile -p android --android-studio
-adb install -r bin/debug/android/example-debug.apk
