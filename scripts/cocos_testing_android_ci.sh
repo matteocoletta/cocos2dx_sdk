@@ -11,6 +11,7 @@ RED='\033[0;31m' # Red color
 GREEN='\033[0;32m' # Green color
 NC='\033[0m' # No Color
 
+cd ${SDK_DIR}
 echo -e "${GREEN}>>> Removing Android JARs${NC}"
 rm -rfv Android/*
 
@@ -20,8 +21,11 @@ echo -e "${GREEN}>>> Building Android JARs${NC}"
 
 echo -e "${GREEN}>>> Building the Android ci testing JAR file ${NC}"
 cd ${SDK_DIR}
-cp -rf Android/* ${EXAMPLE_DIR}/proj.android-studio/app/libs
+mkdir -p ${EXAMPLE_DIR}/proj.android-studio/app/libs
+cp -rfv Android/adjust-android.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
+cp -rfv Android/adjust-testing.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
 
 echo -e "${GREEN}>>> Running cocos project ${NC}"
 cd ${EXAMPLE_DIR}
-cocos run -p android --android-studio
+cocos compile -p android --android-studio
+adb install -r proj.android-studio/app/build/outputs/apk/example-debug.apk
