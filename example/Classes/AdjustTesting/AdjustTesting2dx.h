@@ -30,9 +30,10 @@ public:
         initTesting(baseUrl, commandCallback);
     }
 
+    void initTestSession(std::string sdkPrefix);
     void addInfoToSend(std::string key, std::string value);
     void sendInfoToServer();
-    void initTestSession(std::string sdkPrefix);
+    void setTests(std::string selectedTests);
 };
 #endif
 

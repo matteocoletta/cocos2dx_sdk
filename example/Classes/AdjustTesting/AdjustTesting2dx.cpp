@@ -95,3 +95,22 @@ void AdjustTesting2dx::sendInfoToServer() {
     miSendInfoToServer.env->CallVoidMethod(this->testLibrary, miSendInfoToServer.methodID);
 }
 
+void AdjustTesting2dx::setTests(std::string selectedTests) {
+    if (this->testLibrary == NULL) {
+        CCLOG("\n[*cocos*] >>>> JNI setTests(): testLibrary is null");
+        return;
+    }
+
+    cocos2d::JniMethodInfo miSetTests;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetTests, "com/adjust/testlibrary/TestLibrary", "setTests", "(Ljava/lang/String;)V")) {
+        return;
+    }
+    
+    jstring jSelectedTests = miSetTests.env->NewStringUTF(selectedTests.c_str());
+    
+    miSetTests.env->CallVoidMethod(this->testLibrary, miSetTests.methodID, jSelectedTests);
+
+    miSetTests.env->DeleteLocalRef(jSelectedTests);
+}
+
