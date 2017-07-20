@@ -62,13 +62,14 @@ static void commandCallbackMethod(std::string className, std::string methodName,
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-    //std::string baseUrl = "https://10.0.2.2:8443";
-    std::string baseUrl = "https://192.168.8.41:8443";
+    // std::string baseUrl = "https://10.0.2.2:8443";
+    // std::string baseUrl = "https://192.168.8.41:8443";
+    std::string baseUrl = "https://192.168.8.193:8443";
     std::string sdkPrefix = "cocos2d-x4.11.1@android4.11.4";
+
     Adjust2dx::setTestingMode(baseUrl);
 
     adjustTesting = new AdjustTesting2dx(baseUrl, commandCallbackMethod);
-    //adjustTesting->setTests("current/Test_SessionEventCallbacks");
     adjustTesting->initTestSession(sdkPrefix);
 
     // initialize director
