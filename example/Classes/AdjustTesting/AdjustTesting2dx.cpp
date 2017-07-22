@@ -7,110 +7,66 @@
 
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustTesting2dx.h"
-#include "AdjustTestingProxy2dx.h"
 USING_NS_CC;
 
-void AdjustTesting2dx::initTesting(std::string baseUrl, void(*commandCallback)(std::string className, std::string methodName, std::string jsonParams)) {
-    //Callback
-    //======================
-    setCommandCallbackMethod(commandCallback);
-
-    cocos2d::JniMethodInfo miInitCallback;
-    if (!cocos2d::JniHelper::getMethodInfo(miInitCallback, "com/adjust/testlibrary/AdjustTesting2dxCommandCallback", "<init>", "()V")) {
-        return;
-    }
-
-    jclass clsAdjustTesting2dxCommandCallback = miInitCallback.env->FindClass("com/adjust/testlibrary/AdjustTesting2dxCommandCallback");
-    jmethodID midInitCallback = miInitCallback.env->GetMethodID(clsAdjustTesting2dxCommandCallback, "<init>", "()V");
-    jobject jCallbackProxy = miInitCallback.env->NewObject(clsAdjustTesting2dxCommandCallback, midInitCallback);
-
+void AdjustTesting2dx::initKotlin() {
     //TestLibrary
     //======================
     cocos2d::JniMethodInfo miInit;
-    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/testlibrary/TestLibrary", "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/obaied/testlibrary/MyTestClass", "<init>", "()V")) {
         return;
     }
 
-    //jBaseUrl
+    jclass clsTestLibrary = miInit.env->FindClass("com/obaied/testlibrary/MyTestClass");
+    jmethodID midInit = miInit.env->GetMethodID(clsTestLibrary, "<init>", "()V");
+
+    jobject tmp = miInit.env->NewObject(clsTestLibrary, midInit);
+    this->kotlinLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
+}
+
+void AdjustTesting2dx::initStaticKotlin() {
+    //TestLibrary
     //======================
-    jstring jBaseUrl = miInit.env->NewStringUTF(baseUrl.c_str());
+    cocos2d::JniMethodInfo miInit;
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/obaied/testlibrary/MyTestClass$Companion", "<init>", "()V")) {
+        return;
+    }
 
-    jclass clsTestLibrary = miInit.env->FindClass("com/adjust/testlibrary/TestLibrary");
-    jmethodID midInit = miInit.env->GetMethodID(clsTestLibrary, "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V");
-    
-    jobject tmp = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCallbackProxy);
-	this->testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
+    jclass clsTestLibrary = miInit.env->FindClass("com/obaied/testlibrary/MyTestClass$Companion");
+    jmethodID midInit = miInit.env->GetMethodID(clsTestLibrary, "<init>", "()V");
 
-    miInit.env->DeleteLocalRef(jBaseUrl);
-    miInitCallback.env->DeleteLocalRef(jCallbackProxy);
+    jobject tmp = miInit.env->NewObject(clsTestLibrary, midInit);
+    this->staticKotlinLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
 }
 
-void AdjustTesting2dx::initTestSession(std::string sdkPrefix) {
-    if (this->testLibrary == NULL) {
-        CCLOG("\n[*cocos*] >>>> JNI initTestSession() testLibrary is null");
+void AdjustTesting2dx::getFoo() {
+    if (this->kotlinLibrary == NULL) {
+        CCLOG("\n[*cocos*] >>>> JNI getFoo() kotlinLibrary is null");
         return;
     }
 
-    cocos2d::JniMethodInfo miInitTestSession;
-
-    if (!cocos2d::JniHelper::getMethodInfo(miInitTestSession, "com/adjust/testlibrary/TestLibrary", "initTestSession", "(Ljava/lang/String;)V")) {
+    CCLOG("\n[*cocos*] >>>> JNI getFoo() 1 >>>>");
+    cocos2d::JniMethodInfo miGetFoo;
+    if (!cocos2d::JniHelper::getMethodInfo(miGetFoo, "com/obaied/testlibrary/MyTestClass", "getFoo", "()V")) {
         return;
     }
-    
-    jstring jSdkPrefix = miInitTestSession.env->NewStringUTF(sdkPrefix.c_str());
-    
-    miInitTestSession.env->CallVoidMethod(this->testLibrary, miInitTestSession.methodID, jSdkPrefix);
-    
-    miInitTestSession.env->DeleteLocalRef(jSdkPrefix);
+    CCLOG("\n[*cocos*] >>>> JNI getFoo() 2 >>>>");
+
+    miGetFoo.env->CallVoidMethod(this->kotlinLibrary, miGetFoo.methodID);
 }
 
-void AdjustTesting2dx::addInfoToSend(std::string key, std::string value) {
-    if (this->testLibrary == NULL) {
-        CCLOG("\n[*cocos*] >>>> JNI addInfoToSend() testLibrary is null");
+void AdjustTesting2dx::getStaticFoo() {
+    if (this->staticKotlinLibrary == NULL) {
+        CCLOG("\n[*cocos*] >>>> JNI getStaticFoo() staticKotlinLibrary is null");
         return;
     }
 
-    cocos2d::JniMethodInfo miAddInfoToSend;
-
-    if (!cocos2d::JniHelper::getMethodInfo(miAddInfoToSend, "com/adjust/testlibrary/TestLibrary", "addInfoToSend", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    CCLOG("\n[*cocos*] >>>> JNI getStaticFoo() 1 >>>>");
+    cocos2d::JniMethodInfo miGetStaticFoo;
+    if (!cocos2d::JniHelper::getMethodInfo(miGetStaticFoo, "com/obaied/testlibrary/MyTestClass$Companion", "getStaticFoo", "()V")) {
         return;
     }
-    
-    jstring jKey = miAddInfoToSend.env->NewStringUTF(key.c_str());
-    jstring jValue = miAddInfoToSend.env->NewStringUTF(value.c_str());
-    
-    miAddInfoToSend.env->CallVoidMethod(this->testLibrary, miAddInfoToSend.methodID, jKey, jValue);
+    CCLOG("\n[*cocos*] >>>> JNI getStaticFoo() 2 >>>>");
 
-    miAddInfoToSend.env->DeleteLocalRef(jKey);
-    miAddInfoToSend.env->DeleteLocalRef(jValue);
+    miGetStaticFoo.env->CallVoidMethod(this->staticKotlinLibrary, miGetStaticFoo.methodID);
 }
-
-void AdjustTesting2dx::sendInfoToServer() {
-    cocos2d::JniMethodInfo miSendInfoToServer;
-
-    if (!cocos2d::JniHelper::getMethodInfo(miSendInfoToServer, "com/adjust/testlibrary/TestLibrary", "sendInfoToServer", "()V")) {
-        return;
-    }
-
-    miSendInfoToServer.env->CallVoidMethod(this->testLibrary, miSendInfoToServer.methodID);
-}
-
-void AdjustTesting2dx::setTests(std::string selectedTests) {
-    if (this->testLibrary == NULL) {
-        CCLOG("\n[*cocos*] >>>> JNI setTests(): testLibrary is null");
-        return;
-    }
-
-    cocos2d::JniMethodInfo miSetTests;
-
-    if (!cocos2d::JniHelper::getMethodInfo(miSetTests, "com/adjust/testlibrary/TestLibrary", "setTests", "(Ljava/lang/String;)V")) {
-        return;
-    }
-    
-    jstring jSelectedTests = miSetTests.env->NewStringUTF(selectedTests.c_str());
-    
-    miSetTests.env->CallVoidMethod(this->testLibrary, miSetTests.methodID, jSelectedTests);
-
-    miSetTests.env->DeleteLocalRef(jSelectedTests);
-}
-

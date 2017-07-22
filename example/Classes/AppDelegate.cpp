@@ -1,4 +1,3 @@
-#include "CommandExecutor.h"
 #include "HelloWorldScene.h"
 #include "Adjust/Adjust2dx.h"
 #include "AppDelegate.h"
@@ -10,8 +9,6 @@ static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
-static CommandExecutor gCommandExecutor = CommandExecutor();
-static AdjustTesting2dx* adjustTesting = 0;
 
 AppDelegate::AppDelegate()
 {
@@ -19,18 +16,6 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate() 
 {
-}
-
-void AppDelegate::addInfoToSend(std::string key, std::string value) {
-    if(adjustTesting == NULL) {
-        CCLOG("\n[*cocos*] adjustTesting is null");
-    }
-
-    adjustTesting->addInfoToSend(key, value);
-}
-
-void AppDelegate::sendInfoToServer() {
-    adjustTesting->sendInfoToServer();
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -50,27 +35,7 @@ static int register_all_packages()
     return 0; //flag for packages manager
 }
 
-static void commandCallbackMethod(std::string className, std::string methodName, std::string jsonParams) {
-    // Printing all attribution properties.
-    CCLOG("\n[*cocos*] command received");
-    CCLOG("\n[*cocos*] class name: %s", className.c_str());
-    CCLOG("\n[*cocos*] method name: %s", methodName.c_str());
-    CCLOG("\n[*cocos*] params: %s", jsonParams.c_str());
-    CCLOG("\n");
-
-    gCommandExecutor.ExecuteCommand(className, methodName, jsonParams);
-}
-
 bool AppDelegate::applicationDidFinishLaunching() {
-    //std::string baseUrl = "https://10.0.2.2:8443";
-    std::string baseUrl = "https://192.168.8.41:8443";
-    std::string sdkPrefix = "cocos2d-x4.11.1@android4.11.4";
-    Adjust2dx::setTestingMode(baseUrl);
-
-    adjustTesting = new AdjustTesting2dx(baseUrl, commandCallbackMethod);
-    //adjustTesting->setTests("current/Test_SessionEventCallbacks");
-    adjustTesting->initTestSession(sdkPrefix);
-
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();

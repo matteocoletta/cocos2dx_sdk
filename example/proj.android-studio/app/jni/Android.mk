@@ -14,7 +14,6 @@ LOCAL_MODULE_FILENAME := libMyGame
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../../Classes/AppDelegate.cpp \
                    ../../../Classes/HelloWorldScene.cpp \
-                   ../../../Classes/CommandExecutor.cpp \
                    ../../../Classes/Adjust/AdjustConfig2dx.cpp \
                    ../../../Classes/Adjust/AdjustAttribution2dx.cpp \
                    ../../../Classes/Adjust/AdjustProxy2dx.cpp \

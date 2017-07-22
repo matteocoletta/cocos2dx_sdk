@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "Adjust/Adjust2dx.h"
+#include "AdjustTesting/AdjustTesting2dx.h"
 
 USING_NS_CC;
 
@@ -80,7 +81,7 @@ bool HelloWorld::init()
 
 void HelloWorld::trackSimpleEvent(Ref* pSender)
 {
-    AdjustEvent2dx adjustEvent = AdjustEvent2dx("g3mfiw");
-    Adjust2dx::trackEvent(adjustEvent);
-
+    AdjustTesting2dx* adjustTesting = new AdjustTesting2dx();
+    adjustTesting->getFoo();
+    adjustTesting->getStaticFoo();
 }

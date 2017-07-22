@@ -15,25 +15,27 @@
 
 class AdjustTesting2dx {
 private:
-    jobject testLibrary;
+    jobject kotlinLibrary;
+    jobject staticKotlinLibrary;
 
-    void initTesting(std::string baseUrl, void(*commandCallback)(std::string className, std::string methodName, std::string jsonParams));
+    void initKotlin();
+    void initStaticKotlin();
 
 public:
-    AdjustTesting2dx() {}
+    AdjustTesting2dx() {
+        initKotlin();
+        initStaticKotlin();
+    }
+
     ~AdjustTesting2dx() {
-	    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(this->testLibrary);
-        this->testLibrary = NULL;
+	    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(this->kotlinLibrary);
+	    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(this->staticKotlinLibrary);
+        this->kotlinLibrary = NULL;
+        this->staticKotlinLibrary = NULL;
     }
 
-    AdjustTesting2dx(std::string baseUrl, void(*commandCallback)(std::string className, std::string methodName, std::string jsonParams)) {
-        initTesting(baseUrl, commandCallback);
-    }
-
-    void initTestSession(std::string sdkPrefix);
-    void addInfoToSend(std::string key, std::string value);
-    void sendInfoToServer();
-    void setTests(std::string selectedTests);
+    void getFoo();
+    void getStaticFoo();
 };
 #endif
 

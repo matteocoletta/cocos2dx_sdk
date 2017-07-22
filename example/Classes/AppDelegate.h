@@ -16,9 +16,6 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    static void addInfoToSend(std::string key, std::string value);
-    static void sendInfoToServer();
-
     virtual void initGLContextAttrs();
 
     /**

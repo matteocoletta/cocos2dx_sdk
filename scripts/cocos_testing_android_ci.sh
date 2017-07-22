@@ -12,18 +12,18 @@ GREEN='\033[0;32m' # Green color
 NC='\033[0m' # No Color
 
 cd ${SDK_DIR}
-echo -e "${GREEN}>>> Removing Android JARs${NC}"
-rm -rfv Android/*
+#echo -e "${GREEN}>>> Removing Android JARs${NC}"
+#rm -rfv Android/*
 
-echo -e "${GREEN}>>> Building Android JARs${NC}"
-(cd ext/android; ./build.sh)
-(cd ext/android; ./build_testing.sh)
+#echo -e "${GREEN}>>> Building Android JARs${NC}"
+#(cd ext/android; ./build.sh)
+#(cd ext/android; ./build_testing.sh)
 
-echo -e "${GREEN}>>> Building the Android ci testing JAR file ${NC}"
-cd ${SDK_DIR}
-mkdir -p ${EXAMPLE_DIR}/proj.android-studio/app/libs
-cp -rfv Android/adjust-android.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
-cp -rfv Android/adjust-testing.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
+#echo -e "${GREEN}>>> Building the Android ci testing JAR file ${NC}"
+#cd ${SDK_DIR}
+#mkdir -p ${EXAMPLE_DIR}/proj.android-studio/app/libs
+#cp -rfv Android/adjust-android.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
+cp -rfv Android/kotlin-test-lib.jar ${EXAMPLE_DIR}/proj.android-studio/app/libs/
 
 echo -e "${GREEN}>>> Running cocos project ${NC}"
 cd ${EXAMPLE_DIR}
