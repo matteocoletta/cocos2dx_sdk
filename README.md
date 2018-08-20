@@ -33,7 +33,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
   * [Deep link handling for iOS apps](#deeplinking-ios)
   * [Deep link handling for Android apps](#deeplinking-android)
       
-## Event Tracking
+### Event Tracking
 
 * [Event tracking](#event-tracking)
   * [Revenue tracking](#revenue-tracking)
