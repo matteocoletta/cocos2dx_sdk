@@ -33,7 +33,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
   * [Deep link handling for iOS apps](#deeplinking-ios)
   * [Deep link handling for Android apps](#deeplinking-android)
       
-### Event Tracking
+## Event Tracking
 
 * [Event tracking](#event-tracking)
   * [Revenue tracking](#revenue-tracking)
@@ -408,7 +408,7 @@ To set up your iOS app to handle deep linking at a native level, please follow o
 
 To set up your Android app to handle deep linking at a native level, please follow our [guide][android-deeplinking] in the official Android SDK README.
 
-### <a id="event-tracking"></a>Event tracking
+## <a id="event-tracking"></a>Event tracking
 
 With Adjust, you can track any event that you want. 
 
@@ -447,6 +447,14 @@ Adjust2dx::trackEvent(adjustEvent);
 ```
 
 **Note**: Transaction ID is the iOS term; the unique identifier for successfully completed Android in-app purchases is **Order ID**.
+
+## Custom Parameters
+
+### <a id="event-parameters"></a>Event parameters
+
+In addition to the data points that Adjust collects [by default](https://partners.adjust.com/placeholders/), you can use the Adjust SDK to track and add to the events as many custom values as you need (user IDs, product IDs...). Custom parameters are only available as raw data (i.e., they won't appear in the Adjust dashboard).
+
+You should use Callback parameters for the values that you collect for your own internal use, and Partner parameters for those that you wish to share with external partners. If a value (e.g. product ID) is tracked both for internal use and to forward it to external partners, the best practice would be to track it both as callback and partner parameter.
 
 ### <a id="callback-parameters"></a>Callback parameters
 
@@ -555,6 +563,8 @@ config.setDelayStart(5.5);
 In this case, the Adjust SDK will wait 5.5 seconds before sending the initial install session and any events created. After this time has elapsed, or if you call `Adjust2dx::sendFirstPackages()` in the meantime, every session parameter will be added to the delayed install session and events, and the Adjust SDK will resume as usual.
 
 **The maximum delay start time of the Adjust SDK is 10 seconds**.
+
+## Additional Features
 
 ### <a id="attribution-callback"></a>Attribution callback
 
