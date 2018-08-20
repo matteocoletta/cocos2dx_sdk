@@ -344,7 +344,7 @@ Build and run your app. If the build is successful, carefully read through the S
 
 Once you integrate the Adjust SDK into your project, you can take advantage of the following features.
 
-## Deep Linking <a id="deeplinking"></a>Deep linking
+## Deep Linking <a id="deeplinking"></a>
 
 If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. There are two scenarios when it comes to deep linking: standard and deferred. 
 
