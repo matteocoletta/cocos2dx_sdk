@@ -2,57 +2,72 @@
 
 This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Adjust.com].
 
-## Table of contents
+---
+
+### Quick Start
 
 * [Basic integration](#basic-integration)
-   * [Get the SDK](#sdk-get)
-   * [Add the SDK to your project](#sdk-add)
-   * [Adjust project settings](#sdk-project-settings)
-      * [[Android] SDK JAR library](#android-sdk-jar)
-      * [[Android] Permissions](#android-permissions)
-      * [[Android] Google Play Services](#android-gps)
-      * [[Android] Proguard settings](#android-proguard)
-      * [[Android] Install referrer](#android-referrer)
-         * [Google Play Referrer API](#android-referrer-gpr-api)
-         * [Google Play Store intent](#android-referrer-gps-intent)
-      * [[iOS] Frameworks](#ios-frameworks)
-      * [[iOS] Additional linker flags](#ios-linker-flags)
-   * [Integrate the SDK into your app](#sdk-integrate)
-   * [Adjust logging](#sdk-logging)
-   * [Android session tracking](#sdk-android-session-tracking)
-   * [Build your app](#sdk-build)
-* [Additional features](#additional-features)
-   * [Event tracking](#event-tracking)
-      * [Revenue tracking](#revenue-tracking)
-      * [Revenue deduplication](#revenue-deduplication)
-      * [Callback parameters](#callback-parameters)
-      * [Partner parameters](#partner-parameters)
-   * [Session parameters](#session-parameters)
-      * [Session callback parameters](#session-callback-parameters)
-      * [Session partner parameters](#session-partner-parameters)
-      * [Delay start](#delay-start)
+  * [Get the SDK](#sdk-get)
+  * [Add the SDK to your project](#sdk-add)
+  * [Adjust project settings](#sdk-project-settings)
+    * [[Android] SDK JAR library](#android-sdk-jar)
+    * [[Android] Permissions](#android-permissions)
+    * [[Android] Google Play Services](#android-gps)
+    * [[Android] Proguard settings](#android-proguard)
+    * [[Android] Install referrer](#android-referrer)
+      * [Google Play Referrer API](#android-referrer-gpr-api)
+      * [Google Play Store intent](#android-referrer-gps-intent)
+    * [[iOS] Frameworks](#ios-frameworks)
+    * [[iOS] Additional linker flags](#ios-linker-flags)
+* [Integrate the SDK into your app](#sdk-integrate)
+* [Adjust logging](#sdk-logging)
+* [Android session tracking](#sdk-android-session-tracking)
+* [SDK signature](#sdk-signature)
+* [Build your app](#sdk-build)
+   
+### Deep Linking
+
+* [Deep linking](#deeplinking)
+  * [Standard deep linking](#deeplinking-standard)
+  * [Deferred deep linking](#deeplinking-deferred)
+  * [Deep link handling for iOS apps](#deeplinking-ios)
+  * [Deep link handling for Android apps](#deeplinking-android)
+      
+### Event Tracking
+
+* [Event tracking](#event-tracking)
+  * [Revenue tracking](#revenue-tracking)
+  * [Revenue deduplication](#revenue-deduplication)
+
+### Custom Parameters
+
+* [Event Parameters](#event-parameters)
+  * [Event callback parameters](#callback-parameters)
+  * [Event partner parameters](#partner-parameters)
+* [Session parameters](#session-parameters)
+  * [Session callback parameters](#session-callback-parameters)
+  * [Session partner parameters](#session-partner-parameters)
+* [Delay start](#delay-start)
+      
+### Additional Features  
+   
+   * [Push token (Uninstall/Reinstall tracking)](#push-token)
    * [Attribution callback](#attribution-callback)
+   * [User attribution](#user-attribution)
    * [Session and event callbacks](#session-event-callbacks)
-   * [Disable tracking](#disable-tracking)
-   * [Offline mode](#offline-mode)
-   * [Event buffering](#event-buffering)
-   * [GDPR right to be forgotten](#gdpr-forget-me)
-   * [SDK signature](#sdk-signature)
-   * [Background tracking](#background-tracking)
    * [Device IDs](#device-ids)
       * [iOS advertising identifier](#di-idfa)
       * [Google Play Services advertising identifier](#di-gps-adid)
       * [Amazon advertising identifier](#di-fire-adid)
       * [Adjust device identifier](#di-adid)
-   * [User attribution](#user-attribution)
-   * [Push token](#push-token)
    * [Pre-installed trackers](#pre-installed-trackers)
-   * [Deep linking](#deeplinking)
-      * [Standard deep linking](#deeplinking-standard)
-      * [Deferred deep linking](#deeplinking-deferred)
-      * [Deep link handling for iOS apps](#deeplinking-ios)
-      * [Deep link handling for Android apps](#deeplinking-android)
-* [License](#license)
+   * [Event buffering](#event-buffering)
+   * [Background tracking](#background-tracking)
+   * [Offline mode](#offline-mode)
+   * [Disable tracking](#disable-tracking)
+   * [GDPR right to be forgotten](#gdpr-forget-me)
+
+### [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
 
