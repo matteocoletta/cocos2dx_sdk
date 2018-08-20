@@ -69,6 +69,8 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
 
 ### [License](#license)
 
+## Quick Start
+
 ## <a id="basic-integration"></a>Basic integration
 
 These are the minimal steps required to integrate the Adjust SDK into your Cocos2d-x project.
@@ -322,13 +324,89 @@ void AppDelegate::applicationWillEnterForeground() {
 
 Adjust SDK is subscribed to iOS system notifications to get this information, so no need to add anything in particular in iOS app case.
 
-## <a id="sdk-build"></a>Build your app
+### <a id="sdk-signature"></a>SDK signature
+
+An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
+
+If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
+
+An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
+
+```cpp
+AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
+Adjust2dx::start(adjustConfig);
+```
+
+### <a id="sdk-build"></a>Build your app
 
 Build and run your app. If the build is successful, carefully read through the SDK logs in the console. After the initial app launch, you should see an **info** log entry saying `Install tracked`.
 
-## <a id="additional-features"></a>Additional features
-
 Once you integrate the Adjust SDK into your project, you can take advantage of the following features.
+
+## Deep Linking <a id="deeplinking"></a>Deep linking
+
+If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. There are two scenarios when it comes to deep linking: standard and deferred. 
+
+Standard deep linking is when a user already has your app installed. iOS and Android offer native support for retrieving information about the deep link content in this scenario.
+
+Deferred deep linking is when a user does not have your app installed. iOS and Android do not offer native support for deferred deep linking. Instead, the Adjust SDK offers a way to retrieve information about the deep link content.
+
+You need to set up deep link handling in your app **at a native level** - in your generated Xcode and Android Studio projects.
+
+### <a id="deeplinking-standard"></a>Standard deep linking
+
+Unfortunately, in this scenario the information about the deep link can not be delivered to you in your Cocos2d-x C++ code. Once you have set up your app to handle deep linking, you will get information about the deep link at a native level. For more information, refer to our chapters below on how to enable deep linking for iOS and Android apps.
+
+### <a id="deeplinking-deferred"></a>Deferred deep linking
+
+In order to get information about the URL content in a deferred deep-linking scenario, you will need to set a callback method on the `AdjustConfig2dx` object which will receive a `std::string` parameter, where the content of the URL will be delivered. You should set this method on the `AdjustConfig2dx` object instance by calling the `setDeferredDeeplinkCallback` method:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static bool deferredDeeplinkCallbackMethod(std::string deeplink) {
+    CCLOG("\nDeferred deep link received!");
+    CCLOG("\nURL: %s", deeplink.c_str());
+    CCLOG("\n");
+
+    Adjust2dx::appWillOpenUrl(deeplink);
+
+    return true;
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setDeferredDeeplinkCallback(deferredDeeplinkCallbackMethod);
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+<a id="deeplinking-deferred-open">In the deferred deep-linking scenario, there is one additional setting which can be set on the deferred deep link callback method. Once the Adjust SDK gets the deferred deep link information, you can choose whether our SDK opens this URL or not. To do this, set the return value of your deferred deep link callback method.
+
+If nothing is set, **the Adjust SDK will always try to launch the URL by default**.
+
+### <a id="deeplinking-ios"></a>Deep link handling for iOS apps
+
+**This should be done in a native Xcode project.**
+
+To set up your iOS app to handle deep linking at a native level, please follow our [guide][ios-deeplinking] in the official iOS SDK README.
+
+### <a id="deeplinking-android"></a>Deep link handling for Android apps
+
+**This should be done in a native Android project.**
+
+To set up your Android app to handle deep linking at a native level, please follow our [guide][android-deeplinking] in the official Android SDK README.
 
 ### <a id="event-tracking"></a>Event tracking
 
@@ -736,20 +814,6 @@ Adjust2dx::gdprForgetMe();
 
 Upon receiving this information, Adjust will erase the user's data and the Adjust SDK will stop tracking the user. No requests from this device will be sent to Adjust in the future.
 
-### <a id="sdk-signature"></a>SDK signature
-
-An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
-
-If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
-
-An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
-
-```cpp
-AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
-Adjust2dx::start(adjustConfig);
-```
-
 ### <a id="background-tracking"></a>Background tracking
 
 The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
@@ -857,70 +921,6 @@ If you want to use the Adjust SDK to recognize users whose devices came with you
     ```
     Default tracker: 'abc123'
     ```
-
-### <a id="deeplinking"></a>Deep linking
-
-If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. There are two scenarios when it comes to deep linking: standard and deferred. 
-
-Standard deep linking is when a user already has your app installed. iOS and Android offer native support for retrieving information about the deep link content in this scenario.
-
-Deferred deep linking is when a user does not have your app installed. iOS and Android do not offer native support for deferred deep linking. Instead, the Adjust SDK offers a way to retrieve information about the deep link content.
-
-You need to set up deep link handling in your app **at a native level** - in your generated Xcode and Android Studio projects.
-
-### <a id="deeplinking-standard"></a>Standard deep linking
-
-Unfortunately, in this scenario the information about the deep link can not be delivered to you in your Cocos2d-x C++ code. Once you have set up your app to handle deep linking, you will get information about the deep link at a native level. For more information, refer to our chapters below on how to enable deep linking for iOS and Android apps.
-
-### <a id="deeplinking-deferred"></a>Deferred deep linking
-
-In order to get information about the URL content in a deferred deep-linking scenario, you will need to set a callback method on the `AdjustConfig2dx` object which will receive a `std::string` parameter, where the content of the URL will be delivered. You should set this method on the `AdjustConfig2dx` object instance by calling the `setDeferredDeeplinkCallback` method:
-
-```cpp
-#include "Adjust/Adjust2dx.h"
-
-//...
-
-static bool deferredDeeplinkCallbackMethod(std::string deeplink) {
-    CCLOG("\nDeferred deep link received!");
-    CCLOG("\nURL: %s", deeplink.c_str());
-    CCLOG("\n");
-
-    Adjust2dx::appWillOpenUrl(deeplink);
-
-    return true;
-}
-
-// ...
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    std::string appToken = "{YourAppToken}";
-    std::string environment = AdjustEnvironmentSandbox2dx;
-
-    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-    adjustConfig.setDeferredDeeplinkCallback(deferredDeeplinkCallbackMethod);
-    Adjust2dx::start(adjustConfig);
-
-    // ...
-}
-```
-
-<a id="deeplinking-deferred-open">In the deferred deep-linking scenario, there is one additional setting which can be set on the deferred deep link callback method. Once the Adjust SDK gets the deferred deep link information, you can choose whether our SDK opens this URL or not. To do this, set the return value of your deferred deep link callback method.
-
-If nothing is set, **the Adjust SDK will always try to launch the URL by default**.
-
-### <a id="deeplinking-ios"></a>Deep link handling for iOS apps
-
-**This should be done in a native Xcode project.**
-
-To set up your iOS app to handle deep linking at a native level, please follow our [guide][ios-deeplinking] in the official iOS SDK README.
-
-### <a id="deeplinking-android"></a>Deep link handling for Android apps
-
-**This should be done in a native Android project.**
-
-To set up your Android app to handle deep linking at a native level, please follow our [guide][android-deeplinking] in the official Android SDK README.
 
 
 [adjust]:       http://adjust.com
