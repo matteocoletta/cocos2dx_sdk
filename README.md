@@ -566,6 +566,16 @@ In this case, the Adjust SDK will wait 5.5 seconds before sending the initial in
 
 ## Additional Features
 
+### <a id="push-token"></a>Push token (Uninstall/Reinstall tracking)
+
+To send us a push notification token, add the following call to Adjust **whenever your app receives the token or it is updated**:
+
+```cpp
+Adjust2dx::setDeviceToken("YourPushNotificationToken");
+```
+
+Push tokens are used for the Adjust Audience Builder and client callbacks, and are required for the upcoming uninstall tracking feature.
+
 ### <a id="attribution-callback"></a>Attribution callback
 
 Adjust can also send you a callback upon any change in attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps if you wish to implement the callback in your application:
@@ -619,6 +629,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
 ```
 
 Please make sure to consider the [applicable attribution data policies][attribution-data].
+
+### <a id="user-attribution"></a>User attribution
+
+Attribution callbacks are triggered via the method described in the [attribution callback section](#attribution-callback). They provide you with information about any changes to your users’ attribution values. If you wish to access information about a user's current attribution value at any other time, you can make a call to the following method of the `Adjust2dx` instance:
+
+```cpp
+AdjustAttribution2dx attribution = Adjust2dx::getAttribution();
+```
+
+**Note**: Information about a user’s current attribution value is only available after the Adjust backed has tracked your app's installation and an initial attribution callback has been triggered. From that moment on, the Adjust SDK has information about the user's attribution value and you can access it with this method. So, **it is not possible** to access a user's attribution value before the SDK has been initialized and an initial attribution callback has been triggered.
 
 ### <a id="session-event-callbacks"></a>Session and event callbacks
 
@@ -768,84 +788,6 @@ And both event- and session-failed objects also contain:
 
 - `std::string willRetry` indicates there will be an attempt to resend the package at a later time.
 
-### <a id="disable-tracking"></a>Disable tracking
-
-You can disable the Adjust SDK from tracking by invoking the `Adjust2dx::setEnabled` method with the enabled parameter set to `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
-
-```cpp
-Adjust2dx::setEnabled(false);
-```
-
-You can verify if the Adjust SDK is currently active by using the `Adjust2dx::isEnabled()` method. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
-
-### <a id="offline-mode"></a>Offline mode
-
-You can put the Adjust SDK into offline mode, suspending transmissions to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so it is best not to trigger too many events while in offline mode.
-
-You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `true`.
-
-```cpp
-Adjust2dx::setOfflineMode(true);
-```
-
-Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `false`. When the Adjust SDK is put back in online mode, all saved information is sent to our servers with the correct time information.
-
-Unlike when disabling tracking, **this setting is not remembered** between sessions. This means that the Adjust SDK always starts in online mode, even if the app was terminated in offline mode.
-
-### <a id="event-buffering"></a>Event buffering
-
-If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering through your `AdjustConfig2dx` instance by calling the `setEventBufferingEnabled` method:
-
-```cpp
-// ...
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    std::string appToken = "{YourAppToken}";
-    std::string environment = AdjustEnvironmentSandbox2dx;
-
-    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-    adjustConfig.setEventBufferingEnabled(true);
-    Adjust2dx::start(adjustConfig);
-
-    // ...
-}
-```
-
-If nothing is set here, event buffering is **disabled by default**.
-
-### <a id="gdpr-forget-me"></a>GDPR right to be forgotten
-
-In accordance with article 17 of the EU's General Data Protection Regulation (GDPR), you can notify Adjust when a user has exercised their right to be forgotten. Calling the following method will instruct the Adjust SDK to communicate the user's choice to be forgotten to the Adjust backend:
-
-```cpp
-Adjust2dx::gdprForgetMe();
-```
-
-Upon receiving this information, Adjust will erase the user's data and the Adjust SDK will stop tracking the user. No requests from this device will be sent to Adjust in the future.
-
-### <a id="background-tracking"></a>Background tracking
-
-The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
-
-```cpp
-// ...
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    std::string appToken = "{YourAppToken}";
-    std::string environment = AdjustEnvironmentSandbox2dx;
-
-    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-    adjustConfig.setSendInBackground(true);
-    Adjust2dx::start(adjustConfig);
-
-    // ...
-}
-```
-
-If nothing is set here, sending in the background is **disabled by default**.
-
 ### <a id="device-ids"></a>Device IDs
 
 Certain services (such as Google Analytics) require you to coordinate device and client IDs in order to prevent duplicate reporting.
@@ -891,26 +833,6 @@ std::string adid = Adjust2dx::getAdid();
 
 **Note**: Information about the **adid** is only available after the Adjust backed has tracked your app's installation. From that moment on, the Adjust SDK has information about the device **adid** and you can access it with this method. So, **it is not possible** to access the **adid** before the SDK has been initialized and the installation of your app has been tracked successfully.
 
-### <a id="user-attribution"></a>User attribution
-
-Attribution callbacks are triggered via the method described in the [attribution callback section](#attribution-callback). They provide you with information about any changes to your users’ attribution values. If you wish to access information about a user's current attribution value at any other time, you can make a call to the following method of the `Adjust2dx` instance:
-
-```cpp
-AdjustAttribution2dx attribution = Adjust2dx::getAttribution();
-```
-
-**Note**: Information about a user’s current attribution value is only available after the Adjust backed has tracked your app's installation and an initial attribution callback has been triggered. From that moment on, the Adjust SDK has information about the user's attribution value and you can access it with this method. So, **it is not possible** to access a user's attribution value before the SDK has been initialized and an initial attribution callback has been triggered.
-
-### <a id="push-token"></a>Push token
-
-To send us a push notification token, add the following call to Adjust **whenever your app receives the token or it is updated**:
-
-```cpp
-Adjust2dx::setDeviceToken("YourPushNotificationToken");
-```
-
-Push tokens are used for the Adjust Audience Builder and client callbacks, and are required for the upcoming uninstall tracking feature.
-
 ### <a id="pre-installed-trackers"></a>Pre-installed trackers
 
 If you want to use the Adjust SDK to recognize users whose devices came with your app pre-installed, follow these steps.
@@ -931,6 +853,84 @@ If you want to use the Adjust SDK to recognize users whose devices came with you
     ```
     Default tracker: 'abc123'
     ```
+
+### <a id="event-buffering"></a>Event buffering
+
+If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering through your `AdjustConfig2dx` instance by calling the `setEventBufferingEnabled` method:
+
+```cpp
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setEventBufferingEnabled(true);
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+If nothing is set here, event buffering is **disabled by default**.
+
+### <a id="background-tracking"></a>Background tracking
+
+The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
+
+```cpp
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setSendInBackground(true);
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+If nothing is set here, sending in the background is **disabled by default**.
+
+### <a id="offline-mode"></a>Offline mode
+
+You can put the Adjust SDK into offline mode, suspending transmissions to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so it is best not to trigger too many events while in offline mode.
+
+You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `true`.
+
+```cpp
+Adjust2dx::setOfflineMode(true);
+```
+
+Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `false`. When the Adjust SDK is put back in online mode, all saved information is sent to our servers with the correct time information.
+
+Unlike when disabling tracking, **this setting is not remembered** between sessions. This means that the Adjust SDK always starts in online mode, even if the app was terminated in offline mode.
+
+### <a id="disable-tracking"></a>Disable tracking
+
+You can disable the Adjust SDK from tracking by invoking the `Adjust2dx::setEnabled` method with the enabled parameter set to `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
+
+```cpp
+Adjust2dx::setEnabled(false);
+```
+
+You can verify if the Adjust SDK is currently active by using the `Adjust2dx::isEnabled()` method. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
+
+### <a id="gdpr-forget-me"></a>GDPR right to be forgotten
+
+In accordance with article 17 of the EU's General Data Protection Regulation (GDPR), you can notify Adjust when a user has exercised their right to be forgotten. Calling the following method will instruct the Adjust SDK to communicate the user's choice to be forgotten to the Adjust backend:
+
+```cpp
+Adjust2dx::gdprForgetMe();
+```
+
+Upon receiving this information, Adjust will erase the user's data and the Adjust SDK will stop tracking the user. No requests from this device will be sent to Adjust in the future.
 
 
 [adjust]:       http://adjust.com
