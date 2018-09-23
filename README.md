@@ -61,13 +61,15 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [Amazon advertising identifier](#di-fire-adid)
       * [Adjust device identifier](#di-adid)
    * [Pre-installed trackers](#pre-installed-trackers)
-   * [Event buffering](#event-buffering)
    * [Background tracking](#background-tracking)
+   * [Event buffering](#event-buffering)
    * [Offline mode](#offline-mode)
    * [Disable tracking](#disable-tracking)
    * [GDPR right to be forgotten](#gdpr-forget-me)
 
 ### [License](#license)
+
+---
 
 ## Quick Start
 
