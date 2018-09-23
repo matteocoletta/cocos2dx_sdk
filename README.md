@@ -855,6 +855,28 @@ If you want to use the Adjust SDK to recognize users whose devices came with you
     ```
     Default tracker: 'abc123'
     ```
+    
+### <a id="background-tracking"></a>Background tracking
+
+The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
+
+```cpp
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setSendInBackground(true);
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+If nothing is set here, sending in the background is **disabled by default**.
 
 ### <a id="event-buffering"></a>Event buffering
 
@@ -877,28 +899,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 ```
 
 If nothing is set here, event buffering is **disabled by default**.
-
-### <a id="background-tracking"></a>Background tracking
-
-The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
-
-```cpp
-// ...
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    std::string appToken = "{YourAppToken}";
-    std::string environment = AdjustEnvironmentSandbox2dx;
-
-    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-    adjustConfig.setSendInBackground(true);
-    Adjust2dx::start(adjustConfig);
-
-    // ...
-}
-```
-
-If nothing is set here, sending in the background is **disabled by default**.
 
 ### <a id="offline-mode"></a>Offline mode
 
